@@ -5,13 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayur-Verse: Interactive 3D Tree Models</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: #D4AF37;
+            --bg-color: #1C1C1C;
+            --text-color: #FFFFFF;
+            --secondary-text-color: #A9A9A9;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'Playfair Display', serif;
-            background-color: #1C1C1C;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
+
         .welcome-screen {
             position: fixed;
             top: 0;
@@ -27,11 +38,12 @@
             z-index: 1000;
             transition: opacity 0.5s ease-in-out;
         }
+
         .welcome-content {
             text-align: center;
-            color: #D4AF37;
+            color: var(--primary-color);
             padding: 3rem;
-            border: 2px solid #D4AF37;
+            border: 2px solid var(--primary-color);
             animation: fadeIn 1s ease-out;
             background-color: rgba(28, 28, 28, 0.7);
             border-radius: 20px;
@@ -39,60 +51,54 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 2rem;
         }
+
         .welcome-content:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         h1 {
             font-size: 3.5em;
             margin-bottom: 20px;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 2px;
         }
+
         p {
             font-size: 1.2em;
             margin-bottom: 30px;
-            color: #A9A9A9;
+            color: var(--secondary-text-color);
             font-weight: 300;
         }
-        .enter-btn, .info-btn {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: transparent;
-            color: #D4AF37;
-            border: 1px solid #D4AF37;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Playfair Display', serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 10px;
-            margin: 10px;
-        }
-        .home-btn, .team-btn, .sih-btn {
-            padding: 10px 20px;
+
+        .btn {
+            padding: 12px 24px;
             font-size: 1em;
             background-color: transparent;
-            color: #D4AF37;
-            border: 1px solid #D4AF37;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 8px;
-            margin: 5px;
+            border-radius: 30px;
+            margin: 10px;
+            font-weight: 400;
         }
-        .enter-btn:hover, .info-btn:hover, .home-btn:hover, .team-btn:hover, .sih-btn:hover {
-            background-color: #D4AF37;
-            color: #1C1C1C;
+
+        .btn:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
+
         .model-viewer {
             position: fixed;
             top: 0;
@@ -102,10 +108,11 @@
             padding: 20px;
             box-sizing: border-box;
             display: none;
-            background: #1C1C1C;
+            background: var(--bg-color);
             flex-direction: column;
             align-items: center;
         }
+
         iframe {
             width: 100%;
             height: calc(100% - 120px);
@@ -113,20 +120,22 @@
             margin-bottom: 20px;
             border-radius: 15px;
         }
+
         .loading {
-            color: #D4AF37;
+            color: var(--primary-color);
             font-size: 1.5em;
             text-align: center;
             padding-top: 20px;
         }
+
         .popup {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(28, 28, 28, 0.9);
-            border: 2px solid #D4AF37;
+            background-color: rgba(28, 28, 28, 0.95);
+            border: 2px solid var(--primary-color);
             padding: 30px;
             z-index: 1001;
             max-width: 80%;
@@ -136,56 +145,62 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
+
         @keyframes popupFadeIn {
             from { opacity: 0; transform: translate(-50%, -60%); }
             to { opacity: 1; transform: translate(-50%, -50%); }
         }
+
         .popup h2 {
-            color: #D4AF37;
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
+
         .popup ul {
-            color: #A9A9A9;
+            color: var(--secondary-text-color);
             text-align: left;
             padding-left: 20px;
         }
+
         .popup li {
             margin-bottom: 10px;
         }
+
         .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
             background: none;
             border: none;
-            color: #D4AF37;
+            color: var(--primary-color);
             font-size: 1.5em;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
+
         .close-btn:hover {
             transform: scale(1.1);
         }
+
         .button-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
             width: 100%;
         }
-        .sih-btn {
-            background-color: #D4AF37;
-            color: #1C1C1C;
-        }
+
         .external-buttons {
             display: flex;
             justify-content: center;
             width: 100%;
         }
+
         .home-btn-container {
             position: absolute;
             top: 20px;
             left: 20px;
         }
+
         .spotify-player {
             position: fixed;
             bottom: 20px;
@@ -200,49 +215,45 @@
             z-index: 1001;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .spotify-player:hover {
             width: 400px;
             height: 152px;
         }
+
         .spotify-player iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
+
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
-        .spotify-island {
-            animation: float 3s ease-in-out infinite;
-        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-content">
             <h1>Ayur-Verse</h1>
             <p>Experience the majesty of sacred trees in 3D</p>
-            <button class="enter-btn" onclick="showModelViewer()">Enter</button>
+            <button class="btn enter-btn" onclick="showModelViewer()">Enter</button>
         </div>
         <div class="external-buttons">
-            <button class="team-btn" onclick="showTeamInfo()">Info</button>
-            <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="sih-btn">SIH</a>
-        </div>
-        <div class="spotify-player spotify-island">
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/42VsgItocQwOQC3XWZ8JNA?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <button class="btn team-btn" onclick="showTeamInfo()">Info</button>
+            <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="btn sih-btn">SIP</a>
         </div>
     </div>
     <div class="model-viewer" id="modelViewer">
         <div class="home-btn-container">
-            <button class="home-btn" onclick="showWelcomeScreen()">Home</button>
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
         </div>
         <div class="loading" id="loadingMessage">Preparing your journey...</div>
         <iframe id="modelFrame" src="about:blank" width="900" height="1000" frameborder="0" title="luma embed" style="border: none;"></iframe>
         <div class="button-container">
-            <button class="info-btn" onclick="showPopup('curryLeafInfo')">Curry Leaf</button>
+            <button class="btn info-btn" onclick="showPopup('curryLeafInfo')">Curry Leaf</button>
         </div>
     </div>
     <div class="popup" id="curryLeafInfo">
