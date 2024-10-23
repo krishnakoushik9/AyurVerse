@@ -36,7 +36,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.9s ease-in-out;
         }
 
         .welcome-content {
@@ -144,6 +144,69 @@
             padding-top: 20px;
         }
 
+        /* Plant Menu Styles */
+        .plant-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 999;
+            padding: 2rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .plant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        .plant-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .plant-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .plant-card p {
+            font-size: 0.9em;
+            color: var(--secondary-text-color);
+        }
+
+        .development-notice {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(28, 28, 28, 0.95);
+            border: 2px solid var(--primary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1002;
+        }
+
+        /* Existing styles */
         .popup {
             display: none;
             position: fixed;
@@ -215,47 +278,16 @@
             position: absolute;
             top: 20px;
             left: 20px;
-        }
-
-        .spotify-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 250px;
-            height: 80px;
-            background-color: rgba(28, 28, 28, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
             z-index: 1001;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .spotify-player:hover {
-            width: 400px;
-            height: 152px;
-        }
-
-        .spotify-player iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* New styles for the slider */
         .slider-container {
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 20px;
         }
+
         .slider {
             -webkit-appearance: none;
             width: 400px;
@@ -267,9 +299,11 @@
             transition: opacity .2s;
             border-radius: 15px;
         }
+
         .slider:hover {
             opacity: 1;
         }
+
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -279,6 +313,7 @@
             cursor: pointer;
             border-radius: 30%;
         }
+
         .slider::-moz-range-thumb {
             width: 50px;
             height: 48px;
@@ -302,6 +337,47 @@
             <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="btn sih-btn">SIP</a>
         </div>
     </div>
+
+    <div class="plant-menu" id="plantMenu">
+        <div class="home-btn-container">
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
+        </div>
+        <div class="plant-grid">
+            <div class="plant-card" onclick="showCurryLeafModel()">
+                <h3>Curry Leaf Tree</h3>
+                <p>Experience the 3D model of this sacred plant</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Neem Tree</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Holy Basil (Tulsi)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Indian Gooseberry (Amla)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Ashwagandha</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Brahmi</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Cardamom</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Turmeric</h3>
+                <p>Coming Soon</p>
+            </div>
+        </div>
+    </div>
+
     <div class="model-viewer" id="modelViewer">
         <div class="home-btn-container">
             <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
@@ -316,6 +392,7 @@
             <button class="btn info-btn" onclick="showPopup('curryLeafInfo')">Curry Leaf</button>
         </div>
     </div>
+
     <div class="popup" id="curryLeafInfo">
         <button class="close-btn" onclick="hidePopup('curryLeafInfo')">&times;</button>
         <h2>Uses of Curry Leaf Tree</h2>
@@ -326,6 +403,7 @@
             <li><strong>Ornamental:</strong> Grown as an ornamental plant in gardens due to its attractive foliage.</li>
         </ul>
     </div>
+
     <div class="popup" id="teamInfo">
         <button class="close-btn" onclick="hidePopup('teamInfo')">&times;</button>
         <h2>Team Information</h2>
@@ -357,35 +435,59 @@
             <li><strong>Class:</strong> CSM-02</li>
         </ul>
     </div>
+
+    <!-- New Development Notice Popup -->
+    <div class="development-notice" id="developmentNotice">
+        <h2 style="color: var(--primary-color);">Coming Soon!</h2>
+        <p>This plant's 3D model is still under development.</p>
+        <button class="btn" onclick="hideDevelopmentNotice()">Close</button>
+    </div>
+
     <script>
         const enterSlider = document.getElementById('enterSlider');
         const welcomeScreen = document.getElementById('welcomeScreen');
         const modelViewer = document.getElementById('modelViewer');
+        const plantMenu = document.getElementById('plantMenu');
 
         enterSlider.addEventListener('input', function() {
             if (this.value == 100) {
-                showModelViewer();
+                showPlantMenu();
             }
         });
 
-        function showModelViewer() {
-            document.getElementById('welcomeScreen').style.opacity = '0';
+        function showPlantMenu() {
+            welcomeScreen.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('welcomeScreen').style.display = 'none';
-                document.getElementById('modelViewer').style.display = 'flex';
-                
-                setTimeout(() => {
-                    document.getElementById('loadingMessage').style.display = 'none';
-                    document.getElementById('modelFrame').src = "https://lumalabs.ai/embed/c9bfc7e0-826b-4611-a142-cce50ebe8717?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false";
-                }, 2000);
+                welcomeScreen.style.display = 'none';
+                plantMenu.style.display = 'block';
             }, 500);
         }
 
         function showWelcomeScreen() {
-            document.getElementById('modelViewer').style.display = 'none';
-            document.getElementById('welcomeScreen').style.display = 'flex';
-            document.getElementById('welcomeScreen').style.opacity = '1';
+            modelViewer.style.display = 'none';
+            plantMenu.style.display = 'none';
+            welcomeScreen.style.display = 'flex';
+            welcomeScreen.style.opacity = '1';
             enterSlider.value = 0;
+        }
+
+        function showCurryLeafModel() {
+            plantMenu.style.display = 'none';
+            modelViewer.style.display = 'flex';
+            document.getElementById('loadingMessage').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('modelFrame').src = "https://lumalabs.ai/embed/c9bfc7e0-826b-4611-a142-cce50ebe8717?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false";
+            }, 2000);
+        }
+
+        function showDevelopmentNotice() {
+            document.getElementById('developmentNotice').style.display = 'block';
+        }
+
+        function hideDevelopmentNotice() {
+            document.getElementById('developmentNotice').style.display = 'none';
         }
 
         function showPopup(popupId) {
