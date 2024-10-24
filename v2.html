@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ayur-Verse: Interactive 3D Tree Models</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: #D4AF37;
+            --bg-color: #1C1C1C;
+            --text-color: #FFFFFF;
+            --secondary-text-color: #A9A9A9;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(28, 28, 28, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .welcome-content {
+            text-align: center;
+            color: var(--primary-color);
+            padding: 3rem;
+            border: 2px solid var(--primary-color);
+            animation: fadeIn 1s ease-out;
+            background-color: rgba(28, 28, 28, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-content:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: var(--secondary-text-color);
+            font-weight: 300;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            margin: 10px;
+            font-weight: 400;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .model-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: none;
+            background: var(--bg-color);
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 120px);
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .cover-attribution {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 1700px;
+            height: 80px;
+            background-color: var(--bg-color);
+            z-index: 5;
+        }
+
+        .loading {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        /* Plant Menu Styles */
+        .plant-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 999;
+            padding: 2rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .plant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        .plant-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .plant-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .plant-card p {
+            font-size: 0.9em;
+            color: var(--secondary-text-color);
+        }
+
+        .development-notice {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(28, 28, 28, 0.95);
+            border: 2px solid var(--primary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1002;
+        }
+
+        /* Existing styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(28, 28, 28, 0.95);
+            border: 2px solid var(--primary-color);
+            padding: 30px;
+            z-index: 1001;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            animation: popupFadeIn 0.5s ease-out;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .popup h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .popup ul {
+            color: var(--secondary-text-color);
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .popup li {
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .external-buttons {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .home-btn-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 400px;
+            height: 48px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 15px;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 50px;
+            height: 48px;
+            background: var(--primary-color);
+            cursor: pointer;
+            border-radius: 30%;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 50px;
+            height: 48px;
+            background: var(--primary-color);
+            cursor: pointer;
+            border-radius: 30%;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-content">
+            <h1>Ayur-Verse</h1>
+            <p>Experience the majesty of sacred trees in 3D</p>
+            <div class="slider-container">
+                <input type="range" min="0" max="100" value="0" class="slider" id="enterSlider">
+            </div>
+        </div>
+        <div class="external-buttons">
+            <button class="btn team-btn" onclick="showTeamInfo()">Info</button>
+            <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="btn sih-btn">SIP</a>
+        </div>
+    </div>
+
+    <div class="plant-menu" id="plantMenu">
+        <div class="home-btn-container">
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
+        </div>
+        <div class="plant-grid">
+            <div class="plant-card" onclick="showCurryLeafModel()">
+                <h3>Curry Leaf Tree</h3>
+                <p>Experience the 3D model of this sacred plant</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Neem Tree</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Holy Basil (Tulsi)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Indian Gooseberry (Amla)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Ashwagandha</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Brahmi</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Cardamom</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Turmeric</h3>
+                <p>Coming Soon</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="model-viewer" id="modelViewer">
+        <div class="home-btn-container">
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
+        </div>
+        <div class="loading" id="loadingMessage">Preparing your journey...</div>
+        <div class="iframe-container">
+            <iframe id="modelFrame" src="about:blank" frameborder="0" title="luma embed" style="border: none;"></iframe>
+            <div class="cover-logo"></div>
+            <div class="cover-attribution"></div>
+        </div>
+        <div class="button-container">
+            <button class="btn info-btn" onclick="showPopup('curryLeafInfo')">Curry Leaf</button>
+        </div>
+    </div>
+
+    <div class="popup" id="curryLeafInfo">
+        <button class="close-btn" onclick="hidePopup('curryLeafInfo')">&times;</button>
+        <h2>Uses of Curry Leaf Tree</h2>
+        <ul>
+            <li><strong>Culinary:</strong> Widely used in Indian cuisine for its distinct aroma and flavor.</li>
+            <li><strong>Medicinal:</strong> Contains compounds with potential health benefits, including antioxidant and anti-inflammatory properties.</li>
+            <li><strong>Ayurvedic Medicine:</strong> Used in traditional Ayurvedic practices for various ailments.</li>
+            <li><strong>Ornamental:</strong> Grown as an ornamental plant in gardens due to its attractive foliage.</li>
+        </ul>
+    </div>
+
+    <div class="popup" id="teamInfo">
+        <button class="close-btn" onclick="hidePopup('teamInfo')">&times;</button>
+        <h2>Team Information</h2>
+        <ul>
+            <li><strong>Team Number:</strong> 11</li>
+            <li><strong>Team Leader:</strong> Krishna</li>
+            <li><strong>Technologies Used:</strong>
+                <ul>
+                    <li>LUMA-AI</li>
+                    <li>HTML/CSS</li>
+                    <li>Unreal Engine 3d-Polygon CAM</li>
+                    <li>Linux Based OS</li>
+                </ul>
+            </li>
+            <li><strong>LAPTOP USED:</strong>
+                <ul>
+                    <li>ACER SWIFT GO 14 OLED</li>
+                    <li>EVO i5-13500H</li>
+                </ul>
+            </li>
+            <li><strong>Team Members:</strong>
+                <ul>
+                    <li>Krushith</li>
+                    <li>Sujan</li>
+                    <li>Nirvignya</li>
+                    <li>Eshwar</li>
+                </ul>
+            </li>
+            <li><strong>Class:</strong> CSM-02</li>
+        </ul>
+    </div>
+
+    <!-- New Development Notice Popup -->
+    <div class="development-notice" id="developmentNotice">
+        <h2 style="color: var(--primary-color);">Coming Soon!</h2>
+        <p>This plant's 3D model is still under development.</p>
+        <button class="btn" onclick="hideDevelopmentNotice()">Close</button>
+    </div>
+
+    <script>
+        const enterSlider = document.getElementById('enterSlider');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const modelViewer = document.getElementById('modelViewer');
+        const plantMenu = document.getElementById('plantMenu');
+
+        enterSlider.addEventListener('input', function() {
+            if (this.value == 100) {
+                showPlantMenu();
+            }
+        });
+
+        function showPlantMenu() {
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                plantMenu.style.display = 'block';
+            }, 500);
+        }
+
+        function showWelcomeScreen() {
+            modelViewer.style.display = 'none';
+            plantMenu.style.display = 'none';
+            welcomeScreen.style.display = 'flex';
+            welcomeScreen.style.opacity = '1';
+            enterSlider.value = 0;
+        }
+
+        function showCurryLeafModel() {
+            plantMenu.style.display = 'none';
+            modelViewer.style.display = 'flex';
+            document.getElementById('loadingMessage').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('modelFrame').src = "https://lumalabs.ai/embed/c9bfc7e0-826b-4611-a142-cce50ebe8717?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false";
+            }, 2000);
+        }
+
+        function showDevelopmentNotice() {
+            document.getElementById('developmentNotice').style.display = 'block';
+        }
+
+        function hideDevelopmentNotice() {
+            document.getElementById('developmentNotice').style.display = 'none';
+        }
+
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+
+        function hidePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+
+        function showTeamInfo() {
+            showPopup('teamInfo');
+        }
+    </script>
+</body>
+</html>
