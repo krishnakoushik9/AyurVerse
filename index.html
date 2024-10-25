@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ayur-Verse: Interactive 3D Tree Models</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-content">
+            <h1>Ayur-Verse</h1>
+            <p>Experience the majesty of sacred trees in 3D</p>
+            <div class="slider-container">
+                <input type="range" min="0" max="100" value="0" class="slider" id="enterSlider">
+            </div>
+        </div>
+        <div class="external-buttons">
+            <button class="btn team-btn" onclick="showTeamInfo()">Info</button>
+            <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="btn sih-btn">SIP</a>
+        </div>
+    </div>
+
+    <div class="plant-menu" id="plantMenu">
+        <div class="home-btn-container">
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
+        </div>
+        <div class="plant-grid">
+            <div class="plant-card" onclick="showCurryLeafModel()">
+                <h3>Curry Leaf Tree</h3>
+                <p>Experience the 3D model of this sacred plant</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Neem Tree</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Holy Basil (Tulsi)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Indian Gooseberry (Amla)</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Ashwagandha</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Brahmi</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Cardamom</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="plant-card" onclick="showDevelopmentNotice()">
+                <h3>Turmeric</h3>
+                <p>Coming Soon</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="model-viewer" id="modelViewer">
+        <div class="home-btn-container">
+            <button class="btn home-btn" onclick="showWelcomeScreen()">Home</button>
+        </div>
+        <div class="loading" id="loadingMessage">Preparing your journey...</div>
+        <div class="iframe-container">
+            <iframe id="modelFrame" src="about:blank" frameborder="0" title="luma embed" style="border: none;"></iframe>
+            <div class="cover-logo"></div>
+            <div class="cover-attribution"></div>
+        </div>
+        <div class="button-container">
+            <button class="btn info-btn" onclick="showPopup('curryLeafInfo')">Curry Leaf</button>
+        </div>
+    </div>
+
+    <div class="popup" id="curryLeafInfo">
+        <button class="close-btn" onclick="hidePopup('curryLeafInfo')">&times;</button>
+        <h2>Uses of Curry Leaf Tree</h2>
+        <ul>
+            <li><strong>Culinary:</strong> Widely used in Indian cuisine for its distinct aroma and flavor.</li>
+            <li><strong>Medicinal:</strong> Contains compounds with potential health benefits, including antioxidant and anti-inflammatory properties.</li>
+            <li><strong>Ayurvedic Medicine:</strong> Used in traditional Ayurvedic practices for various ailments.</li>
+            <li><strong>Ornamental:</strong> Grown as an ornamental plant in gardens due to its attractive foliage.</li>
+        </ul>
+    </div>
+
+    <div class="popup" id="teamInfo">
+        <button class="close-btn" onclick="hidePopup('teamInfo')">&times;</button>
+        <h2>Team Information</h2>
+        <ul>
+            <li><strong>Team Number:</strong> 11</li>
+            <li><strong>Team Leader:</strong> Krishna</li>
+            <li><strong>Technologies Used:</strong>
+                <ul>
+                    <li>LUMA-AI</li>
+                    <li>HTML/CSS</li>
+                    <li>Unreal Engine 3d-Polygon CAM</li>
+                    <li>Linux Based OS</li>
+                </ul>
+            </li>
+            <li><strong>LAPTOP USED:</strong>
+                <ul>
+                    <li>ACER SWIFT GO 14 OLED</li>
+                    <li>EVO i5-13500H</li>
+                </ul>
+            </li>
+            <li><strong>Team Members:</strong>
+                <ul>
+                    <li>Krushith</li>
+                    <li>Sujan</li>
+                    <li>Nirvignya</li>
+                    <li>Eshwar</li>
+                </ul>
+            </li>
+            <li><strong>Class:</strong> CSM-02</li>
+        </ul>
+    </div>
+
+    <div class="development-notice" id="developmentNotice">
+        <h2 style="color: var(--primary-color);">Coming Soon!</h2>
+        <p>This plant's 3D model is still under development.</p>
+        <button class="btn" onclick="hideDevelopmentNotice()">Close</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
