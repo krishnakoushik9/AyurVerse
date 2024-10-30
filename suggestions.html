@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayur-Verse Feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        body {
+            background-color: #1a1a1a;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 196, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 196, 0, 0.1) 0%, transparent 50%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(34, 34, 34, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 196, 0, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .title {
+            color: #ffc400;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #888;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .developer-info {
+            text-align: center;
+            color: #ffc400;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .developer-info:hover {
+            opacity: 1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+        .form-group:nth-child(3) { animation-delay: 0.6s; }
+        .form-group:nth-child(4) { animation-delay: 0.8s; }
+        .form-group:nth-child(5) { animation-delay: 1s; }
+
+        label {
+            display: block;
+            color: #ffc400;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(51, 51, 51, 0.8);
+            border: 1px solid rgba(255, 196, 0, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            margin-top: 0.5rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #ffc400;
+            box-shadow: 0 0 10px rgba(255, 196, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        button {
+            background: linear-gradient(45deg, #ffc400, #ffcd2c);
+            color: #1a1a1a;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 196, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 196, 0, 0.3);
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(51, 51, 51, 0.5);
+            border-radius: 2px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, #ffc400, #ffcd2c);
+            border-radius: 2px;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Star Rating Styles */
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffc400;
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .star.active {
+            animation: starPop 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">Ayur-Verse</h1>
+        <p class="subtitle">Experience the majesty of sacred trees in 3D</p>
+        <p class="developer-info">Lead Developer & Maintainer: P.KRISHNA KOUSHIK</p>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label>How was the website loading performance?</label>
+                <select id="performanceSelect" required>
+                    <option value="">Select an option</option>
+                    <option value="fast">Fast</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="slow">Slow</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="deviceGroup">
+                <label>What device are you using?</label>
+                <select id="deviceTypeSelect">
+                    <option value="">Select device type</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="mobile">Mobile</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="specificDeviceGroup">
+                <label id="specificDeviceLabel">Device Model</label>
+                <input type="text" id="specificDevice" placeholder="Enter your device model">
+            </div>
+
+            <div class="form-group">
+                <label>Rate your experience</label>
+                <div class="star-rating" id="starRating">
+                    <i class="fas fa-star star" data-rating="1"></i>
+                    <i class="fas fa-star star" data-rating="2"></i>
+                    <i class="fas fa-star star" data-rating="3"></i>
+                    <i class="fas fa-star star" data-rating="4"></i>
+                    <i class="fas fa-star star" data-rating="5"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Additional suggestions or features you'd like to see:</label>
+                <textarea rows="4" placeholder="Enter your suggestions here..."></textarea>
+            </div>
+
+            <button type="submit">Send Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        // Star Rating System
+        const starRating = document.getElementById('starRating');
+        let selectedRating = 0;
+
+        starRating.addEventListener('click', (e) => {
+            if (e.target.classList.contains('star')) {
+                const rating = parseInt(e.target.dataset.rating);
+                selectedRating = rating;
+                
+                // Update stars
+                document.querySelectorAll('.star').forEach(star => {
+                    const starRating = parseInt(star.dataset.rating);
+                    if (starRating <= selectedRating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        // Show/hide device fields with animation
+        document.getElementById('performanceSelect').addEventListener('change', function() {
+            const deviceGroup = document.getElementById('deviceGroup');
+            if (this.value === 'slow') {
+                deviceGroup.classList.remove('hidden');
+                setTimeout(() => deviceGroup.classList.add('visible'), 10);
+            } else {
+                deviceGroup.classList.remove('visible');
+                setTimeout(() => deviceGroup.classList.add('hidden'), 300);
+                document.getElementById('specificDeviceGroup').classList.add('hidden');
+            }
+        });
+
+        // Device type selection
+        document.getElementById('deviceTypeSelect').addEventListener('change', function() {
+            const specificDeviceGroup = document.getElementById('specificDeviceGroup');
+            const specificDeviceLabel = document.getElementById('specificDeviceLabel');
+            
+            if (this.value) {
+                specificDeviceGroup.classList.remove('hidden');
+                setTimeout(() => specificDeviceGroup.classList.add('visible'), 10);
+                
+                if (this.value === 'laptop') {
+                    specificDeviceLabel.textContent = 'Laptop Model';
+                    document.getElementById('specificDevice').placeholder = 'Enter your laptop model';
+                } else {
+                    specificDeviceLabel.textContent = 'Mobile Device Model';
+                    document.getElementById('specificDevice').placeholder = 'Enter your mobile device model';
+                }
+            } else {
+                specificDeviceGroup.classList.remove('visible');
+                setTimeout(() => specificDeviceGroup.classList.add('hidden'), 300);
+            }
+        });
+
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                performance: document.getElementById('performanceSelect').value,
+                deviceType: document.getElementById('deviceTypeSelect').value,
+                specificDevice: document.getElementById('specificDevice').value,
+                rating: selectedRating,
+                suggestions: document.querySelector('textarea').value
+            };
+
+            console.log('Form submitted:', formData);
+            alert('Thank you for your feedback!');
+            this.reset();
+            selectedRating = 0;
+            document.querySelectorAll('.star').forEach(star => star.classList.remove('active'));
+        });
+
+        // Animate loading bar on page load
+        window.addEventListener('load', function() {
+            const loadingProgress = document.querySelector('.loading-progress');
+            loadingProgress.style.width = '100%';
+        });
+    </script>
+</body>
+</html>
