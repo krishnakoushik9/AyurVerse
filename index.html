@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <div id="videoOverlay">
+        <video id="introVideo" autoplay muted playsinline>
+            <source src="introVideo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+  
+
     <div class="circle"></div>
     <div class="circle"></div>
     <div class="circle"></div>
@@ -38,6 +47,7 @@
         </div>
         <div class="external-buttons">
             <button class="btn team-btn" onclick="showTeamInfo()">Info</button>
+             <button class="btn suggestions-btn" onclick="redirectToSuggestions()">Suggestions</button>
             <a href="https://www.sih.gov.in/sih2024PS" target="_blank" class="btn sih-btn">SIP</a>
         </div>
     </div>
@@ -148,5 +158,7 @@
     </div>
 
     <script src="script.js"></script>
+    
+    
 </body>
 </html>
