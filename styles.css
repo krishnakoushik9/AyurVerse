@@ -226,6 +226,31 @@ iframe {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
+/* Falling leaves styles */
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.leaf {
+  position: fixed;
+  top: -50px;
+  width: 30px;
+  height: 30px;
+  background-image: url('https://raw.githubusercontent.com/krishnakoushik9/AyurVerse/main/leaf.jpg'); /* Direct GitHub link */
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0;
+  animation: fall linear infinite;
+}
+
+
 @keyframes popupFadeIn {
     from { opacity: 0; transform: translate(-50%, -60%); }
     to { opacity: 1; transform: translate(-50%, -50%); }
