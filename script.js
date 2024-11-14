@@ -8,6 +8,33 @@ const modelFrame = document.getElementById('modelFrame');
 const coords = { x: 0, y: 0 };
 const circles = document.querySelectorAll(".circle");
 
+// Configuration
+const leafCount = 20; // Number of leaves
+const fallDuration = 10; // Duration of each fall in seconds
+
+// Function to create leaves and start falling animation
+function createFallingLeaves() {
+  for (let i = 0; i < leafCount; i++) {
+    const leaf = document.createElement('div');
+    leaf.classList.add('leaf');
+    leaf.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+    leaf.style.animationDuration = `${fallDuration + Math.random() * 5}s`; // Random fall duration for variation
+    leaf.style.animationDelay = `${Math.random() * 5}s`; // Staggered start
+
+    document.body.appendChild(leaf);
+
+    // Remove leaf element after it falls off the screen
+    leaf.addEventListener('animationend', () => {
+      leaf.remove();
+      createFallingLeaves(); // Recursively add new leaves for continuous effect
+    });
+  }
+}
+
+// Start the animation on page load
+window.addEventListener('load', createFallingLeaves);
+
+
 const colors = [
   "#ffb56b",
   "#fdaf69",
